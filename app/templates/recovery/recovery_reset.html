@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Recovery{% endblock %}
+{% block body %}
+<form action="{{ url_for('post_recovery_reset', secret=secret) }}" method="post">
+    <div class="mdc-card px-16 py-16 mt-16 mb-8 mx-auto" style="max-width:600px;">
+        <h2 class="text-3xl font-bold mb-8">Password Recovery</h2>
+        <label class="mdc-text-field mdc-text-field--filled mb-5" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="new_password">New Password</span>
+            <input class="mdc-text-field__input" type="password" aria-labelledby="new_password" name="new_password">
+            <span class="mdc-line-ripple"></span>
+        </label>
+
+        <label class="mdc-text-field mdc-text-field--filled mb-5" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="cfm_password">Confirm Password</span>
+            <input class="mdc-text-field__input" type="password" aria-labelledby="username" name="cfm_password">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <div id="password-error-text" class="mb-3.5 p-2 mb-2 hidden border rounded bg-rose-100">
+        </div>
+        {% include "includes/captcha.html" %}
+        <div class="mdc-touch-target-wrapper text-right" data-mdc-auto-init="MDCRipple">
+            <button class="mdc-button mdc-button--touch mdc-button--raised">
+                <span class="mdc-button__ripple"></span>
+                <span class="mdc-button__touch"></span>
+                <span class="mdc-button__label">Change Password</span>
+            </button>
+        </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+</form>
+
+<script src="{{ url_for('static', filename='js/validation/password_validation.js') }}"></script>
+{% endblock %}

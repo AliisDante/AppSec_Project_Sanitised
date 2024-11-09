@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Leaderboard{% endblock %}
+{% block body %}
+
+<div class="font-bold text-2xl" style="margin:2%; margin-left:5%;">
+  Leaderboard/<a>Global</a>
+</div>
+<div class="flex items-center">
+  <div class="mdc-data-table mx-auto" style="min-width:65%; margin:5%; margin-top:0">
+    <div class="mdc-data-table__table-container">
+      <table class="mdc-data-table__table" aria-label="Dessert calories">
+        <tbody class="mdc-data-table__content">
+          {% for user in users %}
+          {% set index_offset = (page - 1) * 10 %}
+          <tr class="mdc-data-table__row">
+            <th class="mdc-data-table__cell" scope="row" style="font-size: 1.25rem;">{{ loop.index + index_offset }}</th>
+            <th class="mdc-data-table__cell" scope="row" style="font-size: 1.25rem;">{{ user.username }}</th>
+            <td class="mdc-data-table__cell mdc-data-table__cell--numeric">{{ user.points }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="mdc-card mx-auto" style="margin-right:5%;">
+    <div class="mdc-card__primary-action">
+      <div class="font-bold text-2xl">
+        {{ current_user.first_name }}
+        {{ current_user.last_name }}
+      </div>
+      <div class="mdc-card__media mdc-card__media--square" style="background-image: url('{{ card_image }}')">
+        <div class="mdc-card__media-content"></div>
+      </div>
+      <!-- ... additional primary action content ... -->
+      <div class="mdc-card__ripple"></div>
+    </div>
+    <div>
+      <p class='font-bold text-2xl' style="float:left;">{{ current_user.points }}</p>
+      <p style="margin-left:40px;"> Points</p>
+      <p style="margin-top:5px;">Earning a spot on the leaderboard is not easy, keep working towards it and you will get there.</p>
+    </div>
+    <div class="mdc-card__actions">
+      <div class="mdc-card__action-buttons">
+        <button class="mdc-button mdc-card__action mdc-card__action--button">
+          <div class="mdc-button__ripple"></div>
+          <span class="mdc-button__label">New Calculation</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Pagination links -->
+<div class="pagination">
+  {% if page > 1 %}
+    <a href="{{ url_for('get_leaderboard', page=page-1) }}" class="pagination-link">&lt; Previous</a>
+  {% endif %}
+  {% if page < total_pages %}
+    <a href="{{ url_for('get_leaderboard', page=page+1) }}" class="pagination-link">Next &gt;</a>
+  {% endif %}
+</div>
+
+{% endblock %}

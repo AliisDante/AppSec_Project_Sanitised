@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Calculator{% endblock %}
+
+{% block head %}
+<script src="{{ url_for('static', filename='js/calculator/emission_tracker.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<span style="display: none;" class="day-chip-template mdc-chip w-4/5 my-1 mx-auto"></span>
+<div id="cal-container" class="grid sm:grid-cols-1 md:grid-cols-10 mx-auto">
+  <div id="activities-selection" class="mdc-card col-span-2 my-8 mx-8 py-2">
+    <h3 class="text-3x1 font-bold my-8 mx-auto">Lifestyle Activities</h3>
+    <h3 class="text-3x1 my-4 mx-auto">Transport</h3>
+    <span id="transport-0" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Walking</span>
+    <span id="transport-25" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Cycling</span>
+    <span id="transport-50" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Public Transport</span>
+    <span id="transport-75" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Driving</span>
+    <button class="reset-button mdc-button mdc-button--touch mdc-button--outlined">
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__touch"></span>
+      <span class="mdc-button__label">Add Item</span>
+    </button>
+
+    <hr class="my-2"/>
+    <h3 class="text-3x1 my-4 mx-auto">Food</h3>
+    <span id="food-25" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Plant-Based</span>
+    <span id="food-50" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Local Produce</span>
+    <span id="food-75" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Includes Meat</span>
+    <button class="reset-button mdc-button mdc-button--touch mdc-button--outlined">
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__touch"></span>
+      <span class="mdc-button__label">Add Item</span>
+    </button>
+    
+    <hr class="my-2"/>
+    <h3 class="text-3x1 my-4 mx-auto">Shopping</h3>
+    <span id="shopping-25" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Made Locally</span>
+    <span id="shopping-50" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Second-Hand</span>
+    <span id="shopping-75" class="mdc-chip selection-chip w-4/5 my-1 mx-auto">Imported Goods</span>
+    <button class="reset-button mdc-button mdc-button--touch mdc-button--outlined">
+      <span class="mdc-button__ripple"></span>
+      <span class="mdc-button__touch"></span>
+      <span class="mdc-button__label">Add Item</span>
+    </button>
+  </div>
+  <div id="drop-area" class="col-span-8 mx-4">
+    <div class="sticky top-0">
+        <h1 class="text-3xl font-bold my-8 mx-4">Weekly Emission Calculator</h1>
+        <h3 class="text-3x1 mx-4">Drag your daily activities into the calendar, then hit “generate report” to calculate emissions</h3>
+        <div class="grid sm:grid-cols-1 md:grid-cols-7">
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Monday</h3>
+          </div>
+    
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Tuesday</h3>
+          </div>
+    
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Wednesday</h3>
+          </div>
+    
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Thursday</h3>
+          </div>
+    
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Friday</h3>
+          </div>
+    
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Saturday</h3>
+          </div>
+    
+          <div class="day-activity mdc-card my-8 mx-2 col-span-1 h-72">
+            <h3 class="text-3x1 my-8 mx-auto">Sunday</h3>
+          </div>
+        </div>
+        <button class="generate-button mdc-button mdc-button--touch mdc-button--raised mx-4">
+          <span class="mdc-button__ripple"></span>
+          <span class="mdc-button__touch"></span>
+          <span class="mdc-button__label">Generate Report</span>
+        </button>
+        <button class="reset-button mdc-button mdc-button--touch mdc-button--outlined">
+          <span class="mdc-button__ripple"></span>
+          <span class="mdc-button__touch"></span>
+          <span class="mdc-button__label">Reset</span>
+        </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function submit_activities(compiled_activities,version){
+    fetch(`http://127.0.0.1:5000/calculator/api/${version}/submit`, {
+      method: "post",  
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        "X-CSRFToken":"{{csrf_token()}}"
+      },
+      body:JSON.stringify(compiled_activities)
+    }).then(response => response.json()).then(data => {
+      alert(data.comment);
+      window.open("http://127.0.0.1:5000/calculator/results","_self");
+    })
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Recovery{% endblock %}
+{% block body %}
+<form action="{{ url_for('post_recovery_questions', secret=secret) }}" method="post">
+    <div class="mdc-card px-16 py-16 mt-16 mb-8 mx-auto" style="max-width:600px;">
+        <h2 class="text-3xl font-bold mb-8">Password Recovery</h2>
+        
+        <h3 class="text-3x1">What was the name of the first school you remember attending?</h3>
+        <label class="mdc-text-field mdc-text-field--filled mb-5" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="answer1">Answer</span>
+            <input class="mdc-text-field__input" type="text" aria-labelledby="username" name="answer1">
+            <span class="mdc-line-ripple"></span>
+        </label>
+
+        <h3 class="text-3x1">Where was the destination of your most memorable school field trip?</h3>
+        <label class="mdc-text-field mdc-text-field--filled mb-5" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="username">Answer</span>
+            <input class="mdc-text-field__input" type="text" aria-labelledby="username" name="answer2">
+            <span class="mdc-line-ripple"></span>
+        </label>
+
+        <h3 class="text-3x1">What was your maths teacher's surname in your 8th year of school?</h3>
+        <label class="mdc-text-field mdc-text-field--filled mb-8" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="password">Answer</span>
+            <input class="mdc-text-field__input" type="text" aria-labelledby="password" name="answer3">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        {% include "includes/captcha.html" %}
+        <div class="mdc-touch-target-wrapper text-right" data-mdc-auto-init="MDCRipple">
+            <button class="mdc-button mdc-button--touch mdc-button--raised">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__touch"></span>
+              <span class="mdc-button__label">Submit</span>
+            </button>
+        </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+</form>
+
+{% endblock %}

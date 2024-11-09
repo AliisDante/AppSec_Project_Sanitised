@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Account{% endblock %}
+{% block body %}
+        <div class="mdc-card mt-14 mb-8 ml-10 flex-col" style="float:left; margin-right:5%;">
+            <div class="mdc-list-group">
+              <ul class="mdc-list">
+                <li class="mdc-list-item" tabindex="0" style="padding:10px 40px 10px 40px;">
+                  <span class="mdc-list-item__ripple"></span>
+                    <a href="{{ url_for('get_profile') }}"><span class="mdc-list-item__text text-lg" >Profile</span></a>
+                </li>
+              <a href="{{ url_for('get_account') }}">
+                <li class="mdc-list-item" style="padding:10px 40px 10px 40px;">
+                  <span class="mdc-list-item__ripple"></span>
+                  <span class="mdc-list-item__text text-lg" >Account</span>
+                </li>
+              </a>
+              </ul>
+            </div>
+        </div>
+    <div class="" style='min-height:100%;'>
+        <div class="mdc-card px-8 py-4 mt-14 mb-8" style="margin-right:10%; ">
+            <h1 class="text-4xl py-8 font-bold ">My Account</h1>
+            <hr>
+            <a href="/setting/update_email/verify"><h3 class="py-8 px-8">Change Email</h3></a>
+            <hr>
+            <a href="/setting/update_password"><h3 class="py-8 px-8">Change Password</h3></a>
+            <hr>
+            <a href="/setting/answer_securityqns"><h3 class="py-8 px-8">Change Security Questions</h3></a>
+        </div>
+
+    </div>
+
+{% endblock %}

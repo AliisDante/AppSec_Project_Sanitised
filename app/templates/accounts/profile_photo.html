@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Getting Started{% endblock %}
+{% block body %}
+<form action="/getting_started/get_profile_photo" method="post" enctype="multipart/form-data">
+    <div class="mdc-card px-16 py-16 mt-16 mb-8 mx-auto" style="max-width:600px;">
+        <h2 class="text-3xl font-bold text-center">Give yourself a face!</h2>
+        <h2 class="text-center">Don't worry, you can always do it later.</h2>
+        <img src="data:image/jpeg;base64,{{ profile_pic_base64 }}" alt="Profile Photo"class="mx-auto h-40 h-40 mt-10 mb-10 rounded-full object-cover border-2 border-gray-50">
+          <div class="mdc-touch-target-wrapper text-center">
+            <button class="new_image_button mdc-button mdc-button--touch mdc-button--outlined" type="button">
+              <span class="mdc-button__touch"></span>
+              <span class="mdc-button__label">Add Photo</span>
+              <input type="file" class="new_image_file cursor-pointer -ml-32 w-32 opacity-0" name="profile_photo" multiple>
+            </button>
+          </div>
+        <div class="flex items-center mt-12" style="margin-left:80%;">
+            <div class="mdc-touch-target-wrapper text-center" data-mdc-auto-init="MDCRipple">
+                <button class="mdc-button mdc-button--touch mdc-button--raised">
+                  <span class="mdc-button__ripple"></span>
+                  <span class="mdc-button__touch"></span>
+                  <span class="mdc-button__label">Save</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+</form>
+
+{% endblock %}

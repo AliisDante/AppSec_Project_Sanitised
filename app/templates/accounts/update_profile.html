@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Update Profile{% endblock %}
+{% block body %}
+
+        <div class="mdc-card mt-14 mb-8 ml-10 flex-col" style="float:left; margin-right:5%;">
+            <div class="mdc-list-group">
+              <ul class="mdc-list">
+                <li class="mdc-list-item" tabindex="0" style="padding:10px 40px 10px 40px;">
+                  <span class="mdc-list-item__ripple"></span>
+                    <a href="{{ url_for('get_profile') }}"><span class="mdc-list-item__text text-lg" >Profile</span></a>
+                </li>
+                <li class="mdc-list-item" style="padding:10px 40px 10px 40px;">
+                  <span class="mdc-list-item__ripple"></span>
+                  <a href="{{ url_for('get_account') }}"><span class="mdc-list-item__text text-lg" >Account</span></a>
+                </li>
+              </ul>
+            </div>
+        </div>
+    <div class= style='min-height:100%;'>
+<div class="mdc-card px-8 py-4 mt-14 mb-8" style="margin-right:10%;">
+        <form action="/setting/update_profile" method="post" enctype="multipart/form-data">
+            <div class="flex">
+                <h1 class="text-4xl py-8 font-bold mr-96 flex-1">My Profile</h1>
+
+                <div class="mdc-touch-target-wrapper"  style="margin-top:4%;">
+                    <button class="new_image_button mdc-button mdc-button--touch mdc-button--raised" type="button">
+                      <span class="mdc-button__touch"></span>
+                      <span class="mdc-button__label">Change</span>
+                      <input type="file" class="new_image_file cursor-pointer -ml-32 w-32 opacity-0" name="profile_photo" multiple>
+                    </button>
+                </div>
+                <div class="mdc-touch-target-wrapper" style="margin-top: 4%;">
+                    <button class="new_image_button mdc-button mdc-button--touch mdc-button--outlined" type="submit" formaction="/remove_profile_photo">
+                        <span class="mdc-button__touch"></span>
+                        <span class="mdc-button__label">Delete</span>
+                    </button>
+                </div>
+            </div>
+            <hr>
+            <div class="flex items-center">
+                <div class="font-bold text-lg py-8 px-8">Username  </div>
+                <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="username">Username</span>
+                    <input class="mdc-text-field__input" type="text" aria-labelledby="new_username" name="new_username" value="{{current_user.username}}">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+            </div>
+            <hr>
+            <div class="flex items-center">
+                <div class="font-bold text-lg py-8 px-8">First Name</div>
+                <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="fname">First Name</span>
+                    <input class="mdc-text-field__input" type="text" aria-labelledby="fname" name="new_fname" value="{{current_user.first_name}}">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+            </div>
+            <hr>
+            <div class="flex items-center">
+                <div class="font-bold text-lg py-8 px-8">Last Name </div>
+                <label class="mdc-text-field mdc-text-field--filled" data-mdc-auto-init="MDCTextField">
+                    <span class="mdc-text-field__ripple"></span>
+                    <span class="mdc-floating-label" id="my-label-id">Last Name</span>
+                    <input class="mdc-text-field__input" type="text" aria-labelledby="lname" name="new_lname" value="{{current_user.last_name}}">
+                    <span class="mdc-line-ripple"></span>
+                </label>
+            </div>
+            {% include "includes/captcha.html" %}
+            <div class="flex items-center mt-14" style="margin-left:80%;">
+                <div class="mdc-touch-target-wrapper" style="padding-right:5%;">
+                    <a href='/setting/profile'>
+                        <button class="mdc-button mdc-button--raised">
+                            <span class="mdc-button__label">Save</span>
+                        </button>
+                    </a>
+                </div>
+                <div class="mdc-touch-target-wrapper">
+                    <a href='/setting/profile' class="mdc-button mdc-button--outlined">
+                        <span class="mdc-button__ripple"></span>
+                        <span class="mdc-button__label">Cancel</span>
+                    </a>
+                </div>
+
+            </div>
+        </div>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    </form>
+
+    </div>
+
+
+{% endblock %}

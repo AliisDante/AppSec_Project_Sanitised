@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Home{% endblock %}
+{% block body %}
+<div class="grid md:grid-cols-5 sm:grid-cols-1 w-4/6 gap-4 mx-auto my-32">
+    <div class="my-8 col-span-3">
+        <h1 class="text-3xl font-bold my-4">Goodbye boring progress trackers</h1>
+        <h1 class="text-2xl">Carbon Cruncher - The fun, novel way to keep your carbon footprint in check!</h1>
+        <br/>
+        <a href="{{ url_for('get_name')}}"><button class="mdc-button mdc-button--touch mdc-button--raised">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__touch"></span>
+            <span class="mdc-button__label">Get Started</span>
+        </button></a>
+    </div>
+    <img src="{{ url_for('static', filename='img/elephant.gif') }}" class="my-auto mx-auto w-72 col-span-2"/>
+</div>
+<!-- <div style="margin: 25px; max-width: 1000px;">
+    <h1 class="text-3xl font-bold">Ensuring data security is our top priority</h1>
+    <h1 class="text-3xl">As our app contain features that might collect lots of personal and potentially sentitive information (like one's lifestyle choices), we take safeguarding our users data very seriously</h1>
+</div> -->
+{% endblock %}

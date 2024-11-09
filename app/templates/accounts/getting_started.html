@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Getting Started{% endblock %}
+{% block body %}
+<form action="/getting_started/post_name" method="post">
+    <div class="mdc-card px-16 py-16 mt-16 mb-8 mx-auto" style="max-width:600px;">
+        <h1 class="text-3xl font-bold">Welcome to Carbon Cruncher!</h1>
+        <h3 class="pt-4 pb-4">Just a few things to get you started...</h3>
+        <label class="mdc-text-field mdc-text-field--filled mb-8" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="first_name">First Name</span>
+            <input class="mdc-text-field__input" type="text" aria-labelledby="first_name" name="first_name">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        <label class="mdc-text-field mdc-text-field--filled mb-8" data-mdc-auto-init="MDCTextField">
+            <span class="mdc-text-field__ripple"></span>
+            <span class="mdc-floating-label" id="last_name">Last Name</span>
+            <input class="mdc-text-field__input" type="text" aria-labelledby="last_name" name="last_name">
+            <span class="mdc-line-ripple"></span>
+        </label>
+        {% include "includes/captcha.html" %}
+        <div class="mdc-touch-target-wrapper text-center" data-mdc-auto-init="MDCRipple">
+            <button class="mdc-button mdc-button--touch mdc-button--raised">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__touch"></span>
+              <span class="mdc-button__label">Next</span>
+            </button>
+          </div>
+    </div>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+</form>
+{% endblock %}

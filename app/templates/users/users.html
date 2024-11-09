@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block body %}
+<div class="flex flex-col justify-end w-5/6 mx-auto my-8">
+  <h2 class="text-3xl w-5/6 font-bold mb-5">Users</h2>
+  <div class="mdc-data-table mb-5" data-mdc-auto-init="MDCDataTable">
+    <div class="mdc-data-table__table-container">
+      <table class="mdc-data-table__table" aria-label="Audit Logs">
+        <thead>
+          <tr class="mdc-data-table__header-row">
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Username</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Email</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">First Name</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Last Name</th>
+            <th class="mdc-data-table__header-cell" role="columnheader" scope="col">Delete?</th>
+          </tr>
+        </thead>
+        <tbody class="mdc-data-table__content">
+          {% for i in users %}
+          <tr class="mdc-data-table__row">
+            <td class="mdc-data-table__cell"><a href="{{ url_for('update_user', user_id=i.id) }}">{{ i.username }}</a></td>
+            <td class="mdc-data-table__cell"><a href="{{ url_for('update_user', user_id=i.id) }}">{{ i.email }}</a></td>
+            <td class="mdc-data-table__cell">{{ i.first_name }}</td>
+            <td class="mdc-data-table__cell">{{ i.last_name }}</td>
+            <td class="mdc-data-table__cell">
+              <form action="{{ url_for('delete_user', user_id=i.id) }}" method="post">
+                <div class="mdc-touch-target-wrapper text-right" data-mdc-auto-init="MDCRipple">
+                  <button class="mdc-button mdc-button--touch mdc-button--outlined" type="submit">
+                    <span class="mdc-button__ripple"></span>
+                    <span class="mdc-button__touch"></span>
+                    <span class="mdc-button__label material-icons">delete</span>
+                  </button>
+                </div>
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="flex justify-between items-center">
+    {% if previous_page_number %}
+    <a class="text-blue-500 underline" href="{{ url_for('get_users', page_number=previous_page_number) }}">Back</a>
+    {% else %}
+    {# To trick the CSS into aligning the next button to the right #}
+    <div></div>
+    {% endif %}
+    <a class="text-blue-500 underline" href="{{ url_for('get_users', page_number=next_page_number) }}">Next</a>
+  </div>
+</div>
+{% endblock %}

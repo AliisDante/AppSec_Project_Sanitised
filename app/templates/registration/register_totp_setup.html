@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Register{% endblock %}
+{% block body %}
+<div class="mdc-card px-16 py-16 mt-16 mb-8 mx-auto" style="max-width:600px;">
+    <h2 class="text-3xl font-bold mb-8">Registration</h2>
+    <h3 class="text-3x1 mb-8">Step 3/3 - TOTP Setup</h3>
+    <h3 class="mb-8">Use an authenticator app to scan the following QR code, it will be used to generate a 6-digit code for 2FA everytime you login</h3>
+    <img class="mb-8" src="https://api.qrserver.com/v1/create-qr-code/?data={{ qr_img }}&amp;size=100x100" alt="" title="" />
+    <div class="mdc-touch-target-wrapper text-right" data-mdc-auto-init="MDCRipple">
+      <a href="{{ url_for('get_name') }}">
+      <button class="mdc-button mdc-button--touch mdc-button--raised">
+        <span class="mdc-button__ripple"></span>
+        <span class="mdc-button__touch"></span>
+        <span class="mdc-button__label">Done</span>
+      </button>
+      </a>
+    </div>
+</div>
+
+{% endblock %}

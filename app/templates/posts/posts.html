@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block head %}
+<script src="{{ url_for('static', filename='js/posts/posts.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+<div class="bg-gray-50 min-h-screen grid grid-cols-12 gap-10 px-8 pb-8">
+  <div class="col-span-3">
+    <div class="bg-white user_info shadow-md rounded-md mt-16 px-12 py-12 w-full">
+      <h2 class="user_name font-bold text-lg text-center mb-5">Abel Taskeya</h2>
+      <div class="user_stats flex justify-between">
+        <div class="following flex flex-col items-center">
+          <p class="font-bold">Following</p>
+          <p>35</p>
+        </div>
+        <div class="following flex flex-col items-center">
+          <p class="font-bold">Followers</p>
+          <p>67</p>
+        </div>
+        <div class="following flex flex-col items-center">
+          <p class="font-bold">Points</p>
+          <p>3.1K</p>
+        </div>
+      </div>
+      <hr class="my-7">
+      <div class="call_to_action">
+        <p class="mb-5">Earning points is not easy. Keep working towards your goal and you will get there!</p>
+        <div class="mdc-touch-target-wrapper mr-0 ml-auto" data-mdc-auto-init="MDCRipple">
+          <button class="mdc-button mdc-button--touch mdc-button--outlined">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__touch"></span>
+            <span class="mdc-button__label">New Calculation</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="posts-column col-span-6">
+    {% if current_user.is_authenticated %}
+    <div class="new_post bg-white shadow-md rounded-md mt-16 px-16 pt-12 pb-16 w-full mx-auto">
+      <form action="{{ url_for('confirm_post') }}" method="post" enctype="multipart/form-data">
+        <div class="header mb-6 flex items-center">
+          <div class="stacked flex flex-col items-start">
+            <span><h3 class="inline italic font-bold text-xl">New Post - </h3><h3 class="author inline font-bold text-xl">{{ current_user.first_name }} {{ current_user.last_name }}</h3></span>
+            <p class="datetime_posted text-sm">Now</p>
+          </div>
+        </div>
+        <textarea name="post_content" class="content w-full h-32 rounded-sm px-1.5 py-1 mb-3 text-xl border-2 border-blue-400 outline-none resize-none" placeholder="Type your thoughts here..." required cols="32" rows="4"></textarea>
+        <div class="new_post_image_layer flex flex-wrap gap-x-2 gap-y-3 items-center justify-between mb-3">
+          <div class="new_post_images_container flex flex-wrap gap-x-2 gap-y-3 items-center">
+            <img alt="" class="preview_image_template hidden rounded-sm border-2 border-gray-600 w-16 h-16 object-cover">
+          </div>
+          <div class="mdc-touch-target-wrapper text-right">
+            <button class="new_image_button mdc-button mdc-button--touch mdc-button--outlined" type="button">
+              <span class="mdc-button__touch"></span>
+              <span class="mdc-button__label">New Image</span>
+              <input type="file" class="new_image_file cursor-pointer -ml-32 w-32 opacity-0" name="images" multiple>
+            </button>
+          </div>
+        </div>
+        <div class="footer flex items-center justify-between mb-5">
+          <p class="author_info text-sm">{{ current_user.short_info }}</p>
+          <div class="button_list min-w-fit text-gray-500">
+            <button class="like_button material-icons p-2 border rounded-full mr-3">thumb_up</button>
+            <button class="comment_button material-icons p-2 border rounded-full">chat</button>
+          </div>
+        </div>
+        {% include "includes/captcha.html" %}
+        <div class="mdc-touch-target-wrapper text-right" data-mdc-auto-init="MDCRipple">
+          <button class="mdc-button mdc-button--touch mdc-button--raised" type="submit">
+            <span class="mdc-button__ripple"></span>
+            <span class="mdc-button__touch"></span>
+            <span class="mdc-button__label">New Post</span>
+          </button>
+        </div>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      </form>
+    </div>
+    {% endif %}
+    {% for j in posts %}
+    <div class="post bg-white shadow-md rounded-md mt-12 px-16 pt-12 pb-16 w-full mx-auto" data-post-id="{{ j.id }}">
+      <div class="header mb-6 flex items-center justify-between">
+        <div class="stacked flex flex-col items-start">
+          <h3 class="author font-bold text-xl">{{ j.author.first_name }} {{ j.author.last_name }}</h3>
+          <p class="datetime_posted text-sm">{{ get_post_datetime_formatted(j.timestamp) }}</p>
+        </div>
+        {% if current_user.is_authenticated and current_user.authorisations in ["moderator", "admin"] %}
+        <form action="{{ url_for('delete_post', post_id=j.id) }}" method="post">
+          <div class="mdc-touch-target-wrapper text-right" data-mdc-auto-init="MDCRipple">
+            <button class="mdc-button mdc-button--touch mdc-button--outlined" type="submit">
+              <span class="mdc-button__ripple"></span>
+              <span class="mdc-button__touch"></span>
+              <span class="mdc-button__label">Delete</span>
+            </button>
+          </div>
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        </form>
+        {% endif %}
+      </div>
+      <textarea class="content outline-none mb-5 text-xl w-full h-24 resize-none" readonly cols="32" rows="1">{{ j.content }}</textarea>
+      <div class="post_images_container flex flex-wrap gap-x-2 gap-y-3 items-center">
+        {% for k in j.images %}
+        <img alt="" src="{{ url_for("post_image", image_id=k.id) }}" class="rounded-sm border-2 border-gray-600 w-16 h-16 object-cover">
+        {% endfor %}
+      </div>
+      <div class="footer flex items-center justify-between">
+        <p class="author_info text-sm">{{ j.author.short_info }}</p>
+        <div class="button_list flex items-center min-w-fit">
+          <button class="like_button material-icons p-2 border rounded-full mr-3">thumb_up</button>
+          <span class="mr-5">{{ j.likes }}</span>
+          <button class="comment_button material-icons p-2 border rounded-full">chat</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

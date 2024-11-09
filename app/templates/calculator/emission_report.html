@@ -1,0 +1,154 @@
+{% extends "base.html" %}
+{% block title %}Carbon Cruncher - Calculator Results{% endblock %}
+
+{% block head %}
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.3.2/chart.umd.js'></script> </script>
+{% endblock %}
+
+{% block body %}
+<div class="m-10">
+    <h1 class="text-3xl my-4">Summary Report</h1>
+    <h1 class="my-4">Results are estimates, but still effective in helping you reduce emissions</h1>
+    
+    <div class="grid grid-cols-3 gap-4">
+        <div id="progress" class="mdc-card my-2 p-5">
+            <h1 class="text-1xl font-bold">Progress Overview</h1>
+            <h1 class="text-1xl ">Breakdown of emissions (in tons), by category</h1>
+            <div class="h-15">
+                <canvas id="progress-pie"></canvas>
+            </div>
+        </div>
+        
+        <div id="emission" class="col-span-2 mdc-card my-2 p-5">
+            <h1 class="text-1xl font-bold">History of Carbon Emission Produced</h1>
+            <h1 class="text-1xl ">Over the last month, by week (thur to wed)</h1>
+            <div class="h-15">
+                <canvas id="emission-bar" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    
+    <button class="claim-button reset-button mdc-button mdc-button--touch mdc-button--outlined">
+        <span class="mdc-button__ripple"></span>
+        <span class="mdc-button__touch"></span>
+        <span class="mdc-button__label">Share Progress</span>
+    </button>
+    
+    <h1 class="text-1xl my-4">Recommended ways to reduce emissions, based on your current lifestyle</h1>
+    
+    <div class="grid grid-cols-3 gap-4">
+        <div class="mdc-card my-2 p-5">
+            <h1 id="rec-1" class="text-1xl font-bold">#1 </h1>
+            <h1 class="text-1xl ">generate some stupid ai recommandation???</h1>
+        </div>
+        
+        <div class="mdc-card my-2 p-5">
+            <h1 id="rec-2" class="text-1xl font-bold">#2 </h1>
+            <h1 class="text-1xl ">generate some stupid ai recommandation???</h1>
+        </div>
+        
+        <div class="mdc-card my-2 p-5">
+            <h1 id="rec-3" class="text-1xl font-bold">#2 </h1>
+            <h1 class="text-1xl ">generate some stupid ai recommandation???</h1>
+        </div>
+    </div>
+
+<!--     <div class="mdc-card my-2 p-5" id="report-files">
+        <h1 class="text-1xl my-4">Download report data files</h1>
+        <ul>
+            <li>Week 1: </li>
+            <li>Week 2: </li>
+            <li>Week 3: </li>
+            <li>Week 4: </li>
+        </ul>
+    </div> -->
+</div>
+
+<script src="{{ url_for('static', filename='js/calculator/emission_report.js') }}"></script>
+
+<script>
+    console.log("this is {{current_user.username}}")
+    const person = "{{current_user.username}}"
+
+    let emissionWeeks = [];
+
+    document.addEventListener("DOMContentLoaded", () => {
+    let generate_button = document.querySelector(".claim-button");
+/*     generate_button.addEventListener("click", () => fetch(`http://127.0.0.1:5000/calculator/api/v2/share`, {
+            method: "post",  
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                "X-CSRFToken":"{{csrf_token()}}"
+            },
+            body:{}
+        }).then(response => response.json()).then(data => {
+            alert(data.comment);
+        }));
+    }) */
+
+        generate_button.addEventListener("click", () => {
+            //calculate
+            let hits = 0
+
+            for (i=0;i<4;i++){
+                if (emissionWeeks[i] != 0){
+                    hits += 1;
+                }
+            }
+
+            const pastThreeWeeks = emissionWeeks[0]+emissionWeeks[1]+emissionWeeks[2];
+            
+            if (pastThreeWeeks/hits != 0 && emissionWeeks[3] != 0){
+                const percentageDiff = Math.floor((emissionWeeks[3]/(pastThreeWeeks/hits))*100)-100
+            
+                if (percentageDiff < 0){
+                    msg = `My emissions has dropped by ${Math.abs(percentageDiff)}%! I have played my part and you can do yours too!`
+                }else{
+                    msg = `My emissions has increased by ${percentageDiff}%! I will improve next time and contribute more.`
+                }
+            }else{
+                msg = "not enough data!"
+                alert(msg)
+                return
+            }
+
+
+            //send
+            let formData = new FormData();
+            formData.append('post_content', msg);
+            fetch(`http://127.0.0.1:5000/posts/submit`, {
+                method: "post",  
+                headers: {
+                    "X-CSRFToken":"{{csrf_token()}}"
+                },
+                body:formData
+            })
+
+           
+            alert("shared it on posts!")
+
+            //redirect
+            window.open("http://127.0.0.1:5000/posts","_self")
+        });
+    })
+
+    getReportIds(person).then(reportIds => {
+        console.log("fetching combined data");
+        getReportData(reportIds).then(combinedData => {
+            console.log(combinedData)
+            generateEmissionBar(combinedData[1]);
+            generateProgressPie(combinedData[2]);
+
+            emissionWeeks = combinedData[1];
+
+            problems = combinedData[0];
+            document.getElementById("rec-1").innerHTML = "#1 Reduce "+problems[0];
+            document.getElementById("rec-2").innerHTML = "#2 Reduce "+problems[1];
+            document.getElementById("rec-3").innerHTML = "#3 Reduce "+problems[2];
+        })
+    })
+
+</script>
+{% endblock %}
